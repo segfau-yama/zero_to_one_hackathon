@@ -3,6 +3,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 export interface AuthUser {
   id: number;
   username: string;
+  role: string;
   isWorker: boolean;
 }
 
@@ -16,7 +17,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(() => {
-    const raw = sessionStorage.getItem("authUser");
+    const raw = localStorage.getItem("authUser");
     if (!raw) return null;
     try {
       return JSON.parse(raw) as AuthUser;
@@ -27,12 +28,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (user: AuthUser) => {
     setUser(user);
-    sessionStorage.setItem("authUser", JSON.stringify(user));
+    localStorage.setItem("authUser", JSON.stringify(user));
   };
 
   const logout = () => {
     setUser(null);
-    sessionStorage.removeItem("authUser");
+    localStorage.removeItem("authUser");
   };
 
   return (

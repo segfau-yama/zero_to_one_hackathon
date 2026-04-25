@@ -15,6 +15,7 @@ export interface SnowRemoval {
   iscleared: boolean;
   photo: string;
   user_id: number;
+  username?: string;
 }
 
 export interface Point {

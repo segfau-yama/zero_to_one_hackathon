@@ -101,7 +101,14 @@ export function MapComponent() {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
           }),
-        () => {},
+        (err) => {
+          // SecurityError: 自己署名証明書環境ではGeolocationがブロックされる場合がある
+          // デフォルト座標（仙台）のまま続行
+          if (err.code !== err.PERMISSION_DENIED) {
+            console.warn("Geolocation error:", err.message);
+          }
+        },
+        { timeout: 5000 },
       );
     }
 
@@ -126,7 +133,7 @@ export function MapComponent() {
     if (!selected || !user) return;
     try {
       await markAsCleared(selected.id);
-      await createPoint({ point: 100, user_id: user.id });
+      await createPoint({ point: 100, user_id: selected.user_id });
       await deleteSnowRemoval(selected.id);
       setDataList((prev) => prev.filter((d) => d.id !== selected.id));
       setModalOpen(false);

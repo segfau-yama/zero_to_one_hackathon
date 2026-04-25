@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { HeaderComponent } from "./components/HeaderComponent";
 import { FooterComponent } from "./components/FooterComponent";
 import { CameraComponent } from "./components/CameraComponent";
 import { MapComponent } from "./components/MapComponent";
@@ -19,6 +20,7 @@ function AppContent() {
   return (
     <BrowserRouter>
       <Box sx={{ height: "100dvh", display: "flex", flexDirection: "column" }}>
+        <HeaderComponent />
         <Container
           maxWidth="md"
           disableGutters
@@ -35,6 +37,7 @@ function AppContent() {
             <Route path="/camera" element={<CameraComponent />} />
             <Route path="/map" element={<MapComponent />} />
             <Route path="/point" element={<PointComponent />} />
+            <Route path="/admin" element={<div>管理者画面（準備中）</div>} />
           </Routes>
         </Container>
         <FooterComponent />

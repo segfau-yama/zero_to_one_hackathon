@@ -40,9 +40,9 @@ if (existingUsers.count === 0) {
   db.exec(`
     INSERT INTO user (username, password, role) VALUES ('admin', 'password', 'admin');
     INSERT INTO user (username, password, role) VALUES ('worker', 'password', 'worker');
-    INSERT INTO user (username, password, role) VALUES ('Obara', 'password', 'worker');
-    INSERT INTO user (username, password, role) VALUES ('Yasuda', 'password', 'worker');
-    INSERT INTO user (username, password, role) VALUES ('Yamamoto', 'password', 'worker');
-    INSERT INTO user (username, password, role) VALUES ('Moteki', 'password', 'worker');
+    INSERT INTO user (username, password, role) VALUES ('Obara', 'password', 'user');
+    INSERT INTO user (username, password, role) VALUES ('Yasuda', 'password', 'user');
+    INSERT INTO user (username, password, role) VALUES ('Yamamoto', 'password', 'user');
+    INSERT INTO user (username, password, role) VALUES ('Moteki', 'password', 'user');
   `);
 }

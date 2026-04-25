@@ -66,7 +66,15 @@ export function CameraComponent() {
       navigator.geolocation.getCurrentPosition(
         (pos) =>
           resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        (err) => reject(err),
+        (err) => {
+          // SecurityError: 自己署名証明書環境ではGeolocationがブロックされる場合がある
+          if (err.code === err.PERMISSION_DENIED) {
+            reject(new Error("位置情報の許可が必要です。"));
+          } else {
+            reject(err);
+          }
+        },
+        { timeout: 5000 },
       );
     });
   };

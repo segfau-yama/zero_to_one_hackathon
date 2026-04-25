@@ -30,6 +30,7 @@ export function LoginComponent() {
       setAuth({
         id: user.id,
         username: user.username,
+        role: user.role,
         isWorker: user.role === "worker",
       });
     } catch (err) {

@@ -110,7 +110,14 @@ const server = serve({
       async GET(req) {
         const id = Number(req.params.id);
         const record = db
-          .query("SELECT * FROM snowremoval WHERE id = ?")
+          .query(
+            `
+            SELECT s.*, u.username
+            FROM snowremoval s
+            JOIN user u ON s.user_id = u.id
+            WHERE s.id = ?
+          `,
+          )
           .get(id) as {
           id: number;
           latitude: number;
@@ -120,6 +127,7 @@ const server = serve({
           iscleared: number;
           photo: string;
           user_id: number;
+          username: string;
         } | null;
         if (!record) return error("Not found", 404);
         return json({ ...record, iscleared: record.iscleared === 1 });

@@ -48,9 +48,9 @@ export function SnowRemovalDetailDialog({
             <PersonIcon color="action" fontSize="small" />
             <Typography variant="body1">
               <Typography component="span" fontWeight="bold">
-                ユーザーID:{" "}
+                ユーザー名:{" "}
               </Typography>
-              {selected?.user_id}
+              {selected?.username ?? `ユーザー #${selected?.user_id}`}
             </Typography>
           </Box>
 
