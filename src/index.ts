@@ -32,11 +32,18 @@ function requireRole(
 
 const server = serve({
   hostname: "0.0.0.0",
-  tls: {
-    key: Bun.file("key.pem"),
-    cert: Bun.file("cert.pem"),
-  },
+  // tls: {
+  //   key: Bun.file("key.pem"),
+  //   cert: Bun.file("cert.pem"),
+  // },
   routes: {
+    "/service-worker.js": {
+      GET() {
+        return new Response(Bun.file("./src/service-worker.js"), {
+          headers: { "Content-Type": "application/javascript" },
+        });
+      },
+    },
     "/*": index,
 
     // --- USER ---
