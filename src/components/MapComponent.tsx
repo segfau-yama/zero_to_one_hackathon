@@ -75,6 +75,7 @@ export function MapComponent() {
   const [modalOpen, setModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [clearError, setClearError] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState({
     lat: 38.2682,
     lng: 140.8694,
@@ -101,14 +102,7 @@ export function MapComponent() {
             lat: pos.coords.latitude,
             lng: pos.coords.longitude,
           }),
-        (err) => {
-          // SecurityError: 自己署名証明書環境ではGeolocationがブロックされる場合がある
-          // デフォルト座標（仙台）のまま続行
-          if (err.code !== err.PERMISSION_DENIED) {
-            console.warn("Geolocation error:", err.message);
-          }
-        },
-        { timeout: 5000 },
+        () => {},
       );
     }
 
@@ -131,18 +125,29 @@ export function MapComponent() {
 
   const handleMarkAsCleared = async () => {
     if (!selected || !user) return;
+    setClearError(null);
     try {
       await markAsCleared(selected.id);
-      await createPoint({ point: 100, user_id: selected.user_id });
-      await deleteSnowRemoval(selected.id);
-      setDataList((prev) => prev.filter((d) => d.id !== selected.id));
-      setModalOpen(false);
-      setSelected(null);
-    } catch {
-      // エラーは無視してモーダルを閉じる
-      setModalOpen(false);
-      setSelected(null);
+    } catch (e) {
+      setClearError("除雪完了の更新に失敗しました。");
+      return;
     }
+    try {
+      await createPoint({ point: 100, user_id: selected.user_id });
+    } catch (e) {
+      setClearError(
+        `ポイントの付与に失敗しました: ${e instanceof Error ? e.message : String(e)}`,
+      );
+      return;
+    }
+    try {
+      await deleteSnowRemoval(selected.id);
+    } catch {
+      // 削除失敗は致命的ではないため続行
+    }
+    setDataList((prev) => prev.filter((d) => d.id !== selected.id));
+    setModalOpen(false);
+    setSelected(null);
   };
 
   const handleCloseModal = () => {
@@ -167,6 +172,11 @@ export function MapComponent() {
       {loadError && (
         <Alert severity="error" sx={{ mx: 2, mb: 1 }}>
           {loadError}
+        </Alert>
+      )}
+      {clearError && (
+        <Alert severity="error" sx={{ mx: 2, mb: 1 }}>
+          {clearError}
         </Alert>
       )}
 

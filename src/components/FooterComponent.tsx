@@ -11,13 +11,13 @@ export function FooterComponent() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const pathToValue: Record<string, number> = {
+  const path_to_value: Record<string, number> = {
     "/camera": 0,
     "/map": 1,
     "/point": 2,
   };
 
-  const value = pathToValue[location.pathname] ?? 0;
+  const value = path_to_value[location.pathname] ?? 0;
 
   return (
     <Paper
@@ -26,10 +26,11 @@ export function FooterComponent() {
     >
       <Container maxWidth="md" disableGutters>
         <BottomNavigation
+          showLabels
           value={value}
-          onChange={(_, newValue) => {
+          onChange={(_, new_value) => {
             const paths = ["/camera", "/map", "/point"];
-            navigate(paths[newValue]);
+            navigate(paths[new_value]);
           }}
         >
           <BottomNavigationAction label="カメラ" icon={<CameraAltIcon />} />

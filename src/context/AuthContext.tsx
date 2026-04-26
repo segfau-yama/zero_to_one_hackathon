@@ -17,7 +17,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(() => {
-    const raw = localStorage.getItem("authUser");
+    const raw = sessionStorage.getItem("authUser");
     if (!raw) return null;
     try {
       return JSON.parse(raw) as AuthUser;
@@ -28,12 +28,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (user: AuthUser) => {
     setUser(user);
-    localStorage.setItem("authUser", JSON.stringify(user));
+    sessionStorage.setItem("authUser", JSON.stringify(user));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("authUser");
+    sessionStorage.removeItem("authUser");
   };
 
   return (

@@ -101,7 +101,14 @@ export function PointComponent() {
         <Typography variant="h6" fontWeight="bold">
           マイポイント
         </Typography>
-        {user && <Chip label={user.username} variant="outlined" size="small" />}
+        {user && (
+          <Chip
+            label={user.username}
+            color="primary"
+            variant="contained"
+            size="small"
+          />
+        )}
       </Box>
 
       {loading && <CircularProgress />}
@@ -123,8 +130,6 @@ export function PointComponent() {
             sx={{
               width: "100%",
               maxWidth: { xs: "100%", sm: 480 },
-              bgcolor: "primary.main",
-              color: "primary.contrastText",
               borderRadius: 3,
             }}
           >
@@ -249,6 +254,7 @@ export function PointComponent() {
                       secondary={new Date(record.add_date).toLocaleString(
                         "ja-JP",
                       )}
+                      slotProps={{ secondary: { sx: { color: "white" } } }}
                     />
                   </ListItem>
                 ))}

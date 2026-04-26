@@ -24,7 +24,7 @@ export function HeaderComponent() {
         {/* ロゴ + タイトル */}
         <AcUnitIcon />
         <Typography variant="h6" fontWeight="bold" sx={{ flexGrow: 1 }}>
-          除雪マップ
+          ジョセツ・ジョースター
         </Typography>
 
         {/* 管理者画面ボタン (adminのみ) */}

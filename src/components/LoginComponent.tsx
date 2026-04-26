@@ -71,7 +71,7 @@ export function LoginComponent() {
           >
             <AcUnitIcon sx={{ fontSize: 56 }} color="primary" />
             <Typography variant="h5" fontWeight="bold">
-              除雪マップ
+              ジョセツ・ジョースター
             </Typography>
             <Typography variant="body2" color="text.secondary">
               ログインしてください

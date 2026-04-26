@@ -48,9 +48,23 @@ export interface CreatePointRequest {
 const BASE = "/api";
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const authHeaders: Record<string, string> = {};
+  try {
+    const raw = sessionStorage.getItem("authUser");
+    if (raw) {
+      const u = JSON.parse(raw) as { id: number; role: string };
+      authHeaders["X-User-Id"] = String(u.id);
+      authHeaders["X-User-Role"] = u.role;
+    }
+  } catch {}
+
   const res = await fetch(`${BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
     ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders,
+      ...(options?.headers as Record<string, string> | undefined),
+    },
   });
   if (!res.ok) {
     const text = await res.text();

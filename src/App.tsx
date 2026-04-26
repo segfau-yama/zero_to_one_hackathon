@@ -17,6 +17,9 @@ function AppContent() {
     return <LoginComponent />;
   }
 
+  const isWorkerOrAdmin = user.role === "worker" || user.role === "admin";
+  const defaultPath = isWorkerOrAdmin ? "/map" : "/camera";
+
   return (
     <BrowserRouter>
       <Box sx={{ height: "100dvh", display: "flex", flexDirection: "column" }}>
@@ -33,10 +36,32 @@ function AppContent() {
           }}
         >
           <Routes>
-            <Route path="/" element={<Navigate to="/camera" replace />} />
-            <Route path="/camera" element={<CameraComponent />} />
+            <Route path="/" element={<Navigate to={defaultPath} replace />} />
+
+            {/* user のみアクセス可能 */}
+            <Route
+              path="/camera"
+              element={
+                isWorkerOrAdmin ? (
+                  <Navigate to="/map" replace />
+                ) : (
+                  <CameraComponent />
+                )
+              }
+            />
+            <Route
+              path="/point"
+              element={
+                isWorkerOrAdmin ? (
+                  <Navigate to="/map" replace />
+                ) : (
+                  <PointComponent />
+                )
+              }
+            />
+
+            {/* 全ロールアクセス可能 */}
             <Route path="/map" element={<MapComponent />} />
-            <Route path="/point" element={<PointComponent />} />
             <Route path="/admin" element={<div>管理者画面（準備中）</div>} />
           </Routes>
         </Container>

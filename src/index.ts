@@ -12,6 +12,22 @@ function error(message: string, status = 400) {
   return Response.json({ error: message }, { status });
 }
 
+/**
+ * リクエストヘッダーからユーザー情報を取得し、指定ロールを持つか確認する。
+ * フロントエンドは X-User-Id と X-User-Role ヘッダーを送信すること。
+ * ロールが一致しない場合は null を返す。
+ */
+function requireRole(
+  req: Request,
+  role: string,
+): { id: number; role: string } | null {
+  const userId = req.headers.get("X-User-Id");
+  const userRole = req.headers.get("X-User-Role");
+  if (!userId || !userRole) return null;
+  if (userRole !== role) return null;
+  return { id: Number(userId), role: userRole };
+}
+
 // === サーバー ===
 
 const server = serve({
@@ -69,6 +85,10 @@ const server = serve({
       },
 
       async POST(req) {
+        // user のみ除雪報告可能
+        const caller = requireRole(req, "user");
+        if (!caller) return error("権限がありません", 403);
+
         const body = (await req.json()) as {
           latitude: number;
           longitude: number;
@@ -175,6 +195,10 @@ const server = serve({
     // GET /api/point/user/:userId
     "/api/point/user/:userId": {
       async GET(req) {
+        // user のみポイント取得可能
+        const caller = requireRole(req, "user");
+        if (!caller) return error("権限がありません", 403);
+
         const userId = Number(req.params.userId);
         const list = db
           .query("SELECT * FROM point WHERE user_id = ? ORDER BY add_date DESC")
